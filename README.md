@@ -5,7 +5,7 @@ This folder is a drop-in manager kit for any project. It is guidance-first (no a
 ## How to use
 1) Read SKILL.md.
 2) Read references/rules.md, references/onboarding.md, references/task-contract.md.
-3) Add or edit a model role card in roles/.
+3) Add or edit a model role card in the project roles/.
 4) Create the user project as a sibling of company-kit.
 5) Create tasks using task-template.json.
 6) Manually update task status and logs as work progresses.

@@ -1,5 +1,5 @@
 {
-  "_note": "Save this file as roles/model-<id>.json",
+  "_note": "Save this file as <project>/roles/model-<id>.json",
   "id": "<exact-model-id>",
   "name": "<exact-model-name>",
   "employeeId": "emp-001",

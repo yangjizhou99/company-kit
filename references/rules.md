@@ -4,6 +4,9 @@
 - Manager: decomposes work, assigns tasks, validates outputs, resolves failures.
 - Worker: executes tasks and reports results.
 - Reviewer (including user): claims review tasks, performs acceptance, and completes review.
+ - Manager must not claim or execute worker tasks.
+- Manager must not switch roles or impersonate a worker.
+- Manager must not ask the user to act as a worker.
 
 ## Task lifecycle
 New -> Decomposing -> Ready -> In Progress -> Review -> Done
@@ -28,10 +31,18 @@ Review -> Rework -> Review
 - No approval means no work is allowed.
 - Review tasks also require a separate claim and approval.
 
+## Command authority
+- Only the manager's explicit approval authorizes work.
+- Generic prompts like "继续" only trigger a status check and waiting behavior.
+
 ## Ready visibility policy
 - Tasks eligible to start must be marked Ready.
 - When tasks are marked Ready, announce the Ready list.
 - New members should only claim from Ready.
+
+## Board control
+- Only the manager may modify the task board or task status files.
+- Workers must request changes via the messages log.
 
 ## Feedback loop
 - If output fails, identify cause and owner.
@@ -63,11 +74,15 @@ score = score + success_weight - rework_weight - delay_weight
 ## Waiting policy
 - When a worker finishes a task, wait for next instruction.
 
+## Manual polling protocol
+- Use a fixed phrase to trigger a check (e.g., "继续检查看板").
+- Only check status and take the next approved step when triggered.
+
 ## Language policy
 - Use the user's language for all reports and replies.
 
 ## Identity policy
-- Use your real model id from roles/model-<id>.json in all logs and reports.
+- Use your real model id from the project roles/model-<id>.json in all logs and reports.
 - Do not use placeholder ids like model-001 unless that is your actual id.
 - Model name/id must match the actual model. Do not guess or substitute.
 - If multiple employees use the same model, assign a unique employee instance id.
@@ -81,6 +96,14 @@ score = score + success_weight - rework_weight - delay_weight
 - Do not create project files inside company-kit.
 - Do not modify company-kit files for project work.
 
+## Project folder policy
+- All project files must live under the project root folder (e.g., snake-game/).
+- Do not place project files at the workspace root.
+
+## Default project root
+- Use snake-game as the default project root unless the user specifies another name.
+- Do not ask for confirmation when the default is acceptable.
+
 ## Stepwise execution policy
 - Plan first, then wait for instruction.
 - After each task is completed, report progress and wait.
@@ -92,6 +115,26 @@ score = score + success_weight - rework_weight - delay_weight
 
 ## Project timeline log
 - Every task claim and delivery must be logged in the project timeline log.
+
+## Shared messages log
+- Use a shared messages log in the project folder for inter-employee messages.
+- Only the manager replies to messages and records the reply in the same log.
+
+## Message channels
+- Message windows live in the user project folder, not company-kit.
+- The manager creates messages/employee-<employeeId>.log when a new employee joins.
+- Each employee writes to their own messages/employee-<employeeId>.log.
+- The manager reads all employee logs and writes replies to messages/manager-inbox.log.
+
+## Project roles folder
+- The manager creates the project roles/ folder at project start.
+
+## Employee routing rule
+- All questions and requests from employees must be sent to the manager messages log.
+- Employees do not ask the user directly.
+
+## Completion reporting
+- When an employee detects the project is complete, they report completion in their messages log and wait.
 
 ## Status reporting policy
 - Before any status report, re-check the latest task files and timeline log.

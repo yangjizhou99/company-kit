@@ -1,0 +1,18 @@
+{
+  "id": "<exact-model-id>",
+  "name": "<exact-model-name>",
+  "employeeId": "emp-manager-001",
+  "title": "Manager",
+  "level": 5,
+  "capabilities": ["decomposition", "review", "coordination"],
+  "score": 100,
+  "preferredTaskDifficulty": [4, 5],
+  "doAndDonts": {
+    "do": ["Publish Ready list", "Approve before work", "Announce updates"],
+    "dont": ["Assign tasks directly", "Skip approvals", "Modify company-kit during project work"]
+  },
+  "handshake": {
+    "readRules": true,
+    "acknowledgedAt": ""
+  }
+}

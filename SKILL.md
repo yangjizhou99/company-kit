@@ -11,7 +11,7 @@ It is file-only and works in any project folder.
 ## Quick start
 1) Read references/rules.md
 2) Read references/onboarding.md
-3) Create your role card in roles/
+3) Create your role card in the project roles/ folder
 4) Read references/task-contract.md
 5) Use task-template.json to create tasks
 6) Create the user project as a sibling of company-kit
@@ -34,7 +34,8 @@ It is file-only and works in any project folder.
 - references/onboarding.md
 - references/task-contract.md
 - references/skills-notes.md
-- roles/
+- references/manager.md
+- references/manager-role.json
 - references/decomposition-scheduling.md
 - references/assignment-strategy.md
 - references/progress-board.json
@@ -54,3 +55,8 @@ It is file-only and works in any project folder.
 - references/examples/blame-announcement.md
 - references/examples/rework-claim-template.md
 - references/examples/role-card-template.json
+- references/examples/polling-template.md
+- references/examples/messages-log.md
+- references/examples/message-template.md
+- references/examples/message-channels.md
+- references/examples/employee-message-routing.md
