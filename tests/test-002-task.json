@@ -1,0 +1,25 @@
+{
+  "id": "test-002",
+  "title": "Text processor with normalization and top-k",
+  "description": "Implement normalize_text, word_frequencies, and top_k_words with consistent rules.",
+  "difficulty": 4,
+  "dependencies": [],
+  "parallelizable": false,
+  "assignee": "model-001",
+  "status": "Ready",
+  "inputs": ["s: string", "k: positive integer"],
+  "outputs": ["normalize_text(s)", "word_frequencies(s)", "top_k_words(s, k)"],
+  "acceptanceCriteria": [
+    "normalize_text(\"  Hello   World \") == \"hello world\"",
+    "word_frequencies(\"a a b\") == {\"a\": 2, \"b\": 1}",
+    "top_k_words(\"b a a c c c\", 2) == [\"c\", \"a\"]"
+  ],
+  "logs": [
+    {
+      "at": "",
+      "by": "manager-001",
+      "event": "Created",
+      "details": "Complex test task created to reveal process issues."
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "example-001",
+  "title": "Implement sum_to_n(n)",
+  "description": "Write a function sum_to_n(n) that returns the sum of integers from 1 to n.",
+  "difficulty": 2,
+  "dependencies": [],
+  "parallelizable": false,
+  "assignee": "model-001",
+  "status": "Done",
+  "inputs": ["n: positive integer"],
+  "outputs": ["sum_to_n(n)"],
+  "acceptanceCriteria": [
+    "sum_to_n(1) == 1",
+    "sum_to_n(3) == 6",
+    "sum_to_n(10) == 55"
+  ],
+  "logs": [
+    {
+      "at": "2026-02-10T09:00:00Z",
+      "by": "manager-001",
+      "event": "Created",
+      "details": "Example task created."
+    },
+    {
+      "at": "2026-02-10T09:05:00Z",
+      "by": "model-001",
+      "event": "Claimed",
+      "details": "Task claimed and started."
+    },
+    {
+      "at": "2026-02-10T09:20:00Z",
+      "by": "model-001",
+      "event": "Delivered",
+      "details": "Provided sum_to_n implementation using formula."
+    },
+    {
+      "at": "2026-02-10T09:25:00Z",
+      "by": "manager-001",
+      "event": "Reviewed",
+      "details": "All acceptance criteria passed."
+    },
+    {
+      "at": "2026-02-10T09:26:00Z",
+      "by": "manager-001",
+      "event": "Done",
+      "details": "Marked as Done."
+    }
+  ]
+}

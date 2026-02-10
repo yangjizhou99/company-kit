@@ -1,0 +1,24 @@
+{
+  "id": "review-001",
+  "title": "Review: <task-id>",
+  "description": "Acceptance review for a completed task.",
+  "difficulty": 2,
+  "dependencies": ["<task-id>"],
+  "parallelizable": false,
+  "assignee": "",
+  "status": "Ready",
+  "inputs": ["task output", "acceptance criteria"],
+  "outputs": ["pass/fail decision", "review notes"],
+  "acceptanceCriteria": [
+    "Decision recorded",
+    "Notes include reason and evidence"
+  ],
+  "logs": [
+    {
+      "at": "",
+      "by": "",
+      "event": "Created",
+      "details": "Review task created."
+    }
+  ]
+}

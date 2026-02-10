@@ -1,0 +1,9 @@
+{
+  "testId": "test-002",
+  "result": "pass",
+  "owner": "model-001",
+  "summary": "All acceptance criteria met; normalization, frequency count, and top-k ordering are correct.",
+  "issues": [],
+  "scoreAdjustment": 0,
+  "nextAction": "Proceed to next test or expand edge-case coverage."
+}

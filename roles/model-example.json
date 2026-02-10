@@ -1,0 +1,18 @@
+{
+  "id": "<exact-model-id>",
+  "name": "<exact-model-name>",
+  "employeeId": "emp-001",
+  "title": "Worker",
+  "level": 3,
+  "capabilities": ["analysis", "coding"],
+  "score": 100,
+  "preferredTaskDifficulty": [2, 3],
+  "doAndDonts": {
+    "do": ["Follow rules and approval gate", "Use your real model id"],
+    "dont": ["Work without approval", "Modify company-kit during project work"]
+  },
+  "handshake": {
+    "readRules": true,
+    "acknowledgedAt": ""
+  }
+}

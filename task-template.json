@@ -1,0 +1,27 @@
+{
+  "id": "task-001",
+  "title": "",
+  "description": "",
+  "difficulty": 3,
+  "dependencies": [],
+  "parallelizable": true,
+  "assignee": "",
+  "status": "New",
+  "approval": {
+    "required": true,
+    "approved": false,
+    "approvedBy": "",
+    "approvedAt": ""
+  },
+  "inputs": [],
+  "outputs": [],
+  "acceptanceCriteria": [],
+  "logs": [
+    {
+      "at": "",
+      "by": "",
+      "event": "Created",
+      "details": ""
+    }
+  ]
+}

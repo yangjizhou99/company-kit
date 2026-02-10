@@ -1,0 +1,36 @@
+{
+  "id": "rework-001",
+  "title": "Rework: <task-id>",
+  "description": "Fix confirmed defect from a prior task.",
+  "difficulty": 2,
+  "dependencies": ["<task-id>"],
+  "parallelizable": false,
+  "assignee": "",
+  "restrictedAssignee": "<responsible-owner-id>",
+  "status": "Ready",
+  "approval": {
+    "required": true,
+    "approved": false,
+    "approvedBy": "",
+    "approvedAt": ""
+  },
+  "inputs": ["bug report", "failing behavior", "original task output"],
+  "outputs": ["fixed files", "verification notes"],
+  "acceptanceCriteria": [
+    "Bug no longer reproduces",
+    "No new regressions introduced"
+  ],
+  "blame": {
+    "owner": "<responsible-owner-id>",
+    "reason": "<short root cause>"
+  },
+  "reworkOf": "<task-id>",
+  "logs": [
+    {
+      "at": "",
+      "by": "manager-001",
+      "event": "Created",
+      "details": "Rework task created and restricted to responsible owner."
+    }
+  ]
+}

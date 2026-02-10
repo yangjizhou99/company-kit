@@ -1,0 +1,21 @@
+{
+  "columns": [
+    {"id": "new", "name": "New"},
+    {"id": "ready", "name": "Ready"},
+    {"id": "in-progress", "name": "In Progress"},
+    {"id": "review", "name": "Review"},
+    {"id": "rework", "name": "Rework"},
+    {"id": "done", "name": "Done"}
+  ],
+  "cards": [
+    {
+      "taskId": "",
+      "title": "",
+      "assignee": "",
+      "difficulty": 1,
+      "status": "new",
+      "blockedBy": [],
+      "notes": ""
+    }
+  ]
+}

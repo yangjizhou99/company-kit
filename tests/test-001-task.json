@@ -1,0 +1,25 @@
+{
+  "id": "test-001",
+  "title": "Implement sum_to_n(n)",
+  "description": "Write a function sum_to_n(n) that returns the sum of integers from 1 to n.",
+  "difficulty": 2,
+  "dependencies": [],
+  "parallelizable": false,
+  "assignee": "model-001",
+  "status": "Ready",
+  "inputs": ["n: positive integer"],
+  "outputs": ["sum_to_n(n)"],
+  "acceptanceCriteria": [
+    "sum_to_n(1) == 1",
+    "sum_to_n(3) == 6",
+    "sum_to_n(10) == 55"
+  ],
+  "logs": [
+    {
+      "at": "",
+      "by": "manager-001",
+      "event": "Created",
+      "details": "Test task created for end-to-end flow."
+    }
+  ]
+}
