@@ -304,3 +304,18 @@ Worker reads manager-inbox.log on "继续"
 - All file writes (logs, code, artifacts) must use editor file tools (create_file, replace_string_in_file, etc.).
 - Do NOT use terminal commands (cat, echo, bash -c, etc.) to create or modify any project file.
 - This prevents approval prompts and ensures consistent file handling.
+
+## Violation Enforcement Policy
+- **Authorized edits only**: Workers must NEVER edit `board.json`, `tasks/*.json`, or `manager-inbox.log`.
+- **Violation definition**:
+  1. Editing Manager-owned files (board, task status, manager-inbox).
+  2. Starting work without approval.
+  3. Claiming unready tasks or ignoring dependencies.
+  4. Modifying other workers' logs.
+- **Enforcement actions (Manager Duty)**:
+  - Manager detects violation during polling.
+  - Manager issues `[VIOLATION]` notice to `manager-inbox.log`.
+  - Manager **MUST REVERT** the illegal change immediately (restore file state).
+  - Strike 1: Warning + Revert.
+  - Strike 2: Reassignment + Revert.
+  - Strike 3: Dismissal (mark inactive).

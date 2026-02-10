@@ -118,7 +118,14 @@ This role issues commands, approves work, and maintains the task flow.
    - Scan for workers stuck in repeated waiting patterns (same status >2 times). Send `[INSTRUCTION]` with concrete next steps.
    - If any unprocessed claim exists from a prior poll, approve or reject it NOW.
 
-8. **Announce current status** to the user.
+8. **Violation scan**:
+   - Check if `board.json` or `tasks/*.json` or `manager-inbox.log` were modified by any Worker.
+     - If yes: **REVERT** immediately to known good state.
+     - Issue `[VIOLATION]` notice.
+   - Check for unapproved work (files changed before approval).
+     - If yes: Issue `[VIOLATION]` + `[STOP]` instruction.
+
+9. **Announce current status** to the user.
 
 ### Important: file changes are normal
 - Workers create and edit deliverable files (code, HTML, CSS, JS, etc.) — this is expected.
@@ -165,6 +172,7 @@ This role issues commands, approves work, and maintains the task flow.
 [<ISO timestamp>] [REDIRECT] To <employeeId>: <message>
 [<ISO timestamp>] [WAKE] To <employeeId>: <message>
 [<ISO timestamp>] [INSTRUCTION] To <employeeId>: <message>
+[<ISO timestamp>] [VIOLATION] <employeeId> | type: <reason> | action: Reverted
 ```
 
 ### Three-file update rule

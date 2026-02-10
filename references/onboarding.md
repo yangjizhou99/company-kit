@@ -96,3 +96,11 @@ When you finish delivering a task, or when you receive "继续" and have no acti
 - Never complete multiple tasks in a single response.
 - Do not create TODO lists; execute only one approved step, then wait.
 - Treat "continue" as a polling signal, not approval.
+
+## Violation Warning
+- **Strict Prohibition**: You are NOT allowed to edit `board.json`, `tasks/*.json`, or `manager-inbox.log`.
+- **Consequences**:
+  - The Manager scans for unauthorized edits on every poll.
+  - If you violate this, your changes will be **REVERTED** immediately.
+  - You will receive a `[VIOLATION]` notice.
+  - Repeated violations lead to removal (inactive status).
