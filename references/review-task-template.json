@@ -7,6 +7,12 @@
   "parallelizable": false,
   "assignee": "",
   "status": "Ready",
+  "approval": {
+    "required": true,
+    "approved": false,
+    "approvedBy": "",
+    "approvedAt": ""
+  },
   "inputs": ["task output", "acceptance criteria"],
   "outputs": ["pass/fail decision", "review notes"],
   "acceptanceCriteria": [

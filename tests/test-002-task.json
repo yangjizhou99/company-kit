@@ -7,6 +7,12 @@
   "parallelizable": false,
   "assignee": "model-001",
   "status": "Ready",
+  "approval": {
+    "required": true,
+    "approved": false,
+    "approvedBy": "",
+    "approvedAt": ""
+  },
   "inputs": ["s: string", "k: positive integer"],
   "outputs": ["normalize_text(s)", "word_frequencies(s)", "top_k_words(s, k)"],
   "acceptanceCriteria": [

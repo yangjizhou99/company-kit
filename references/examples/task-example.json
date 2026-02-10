@@ -7,6 +7,12 @@
   "parallelizable": false,
   "assignee": "model-001",
   "status": "Done",
+  "approval": {
+    "required": true,
+    "approved": true,
+    "approvedBy": "manager-001",
+    "approvedAt": "2026-02-10T09:06:00Z"
+  },
   "inputs": ["n: positive integer"],
   "outputs": ["sum_to_n(n)"],
   "acceptanceCriteria": [

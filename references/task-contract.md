@@ -19,13 +19,12 @@
 - reworkOf: original task id (for rework tasks)
 
 ## Status machine
-New -> Decomposing -> Ready -> In Progress (Approved) -> Review -> Done
-Review -> Rework -> Review
+New -> Decomposing -> Ready -> In Progress (Approved) -> Done
 
-## Review task flow
-- When a task enters Review, create a review task card.
-- Review tasks are claimed like any other task.
-- Completing the review task updates the main task to Done or Rework.
+## No per-task review
+- There is no Review or Rework status during normal flow.
+- When Worker delivers, Manager marks Done and unblocks dependents.
+- Review/Rework only happens if the user rejects the final project delivery.
 
 ## Ready rules
 - A task can be Ready only when all dependencies are Done.
@@ -34,13 +33,11 @@ Review -> Rework -> Review
 ## Ownership rules
 - One task, one owner.
 - Owner is responsible for quality and completeness.
-- Review tasks have their own owner (reviewer).
 - If restrictedAssignee is set, only that owner may claim.
 
 ## Approval rules
 - A task may be claimed when Ready.
 - Work starts only after explicit approval.
-- Review work starts only after separate approval.
 
 ## Approval fields
 - required: whether approval is required (default true)
@@ -51,14 +48,14 @@ Review -> Rework -> Review
 ## Logs format
 - at: ISO timestamp
 - by: model id or manager id
-- event: Created | Claimed | Delivered | Reviewed | Rework | Done | Blocked
+- event: Created | Claimed | Delivered | Done | Blocked | Rework
 - details: short summary
 
 ## Acceptance rules
 - Criteria must be explicit and testable.
-- If a failure is found, record cause and owner.
+- Acceptance is done by the user at the end of the project, not per-task.
 
 ## Rework rules
-- If output fails, manager marks Rework and assigns next action.
-- After N failures, reassign to a different model.
+- Rework tasks are only created when the user rejects the final delivery.
+- Manager identifies the responsible owner and creates a rework task.
 - Rework tasks should set reworkOf and restrictedAssignee.

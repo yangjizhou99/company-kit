@@ -31,19 +31,21 @@
 - Notify the manager via messages log to create the project roles/ folder.
 
 ## How to claim a task
-- Announce the task you are claiming before starting.
-- Set task status to In Progress.
-- Add a log entry with your model id and start time.
-- Add a timeline entry in the project folder.
-- Wait for approval before doing any work.
-- Do not edit task files or the board; request changes via messages log.
+- Write a claim announcement in your messages/employee-<employeeId>.log.
+- Include: task ID, title, your model id, start time.
+- **Use file editing tools (create_file / replace_string_in_file) to write logs. Do NOT use terminal commands (cat, echo, etc.) to write to any file.**
+- Do NOT edit task files, board.json, or timeline.log — those are manager-only.
+- Wait for approval in manager-inbox.log before doing any work.
 
 ## How to deliver
-- Provide code or artifacts plus a short explanation.
-- Map outputs to acceptance criteria.
-- Add a log entry with delivery time and summary.
+- Create or edit the deliverable files (code, artifacts) using file tools, not terminal commands.
+- Write a delivery report in your messages/employee-<employeeId>.log:
+  - List of created/modified files.
+  - Map outputs to acceptance criteria.
+  - Delivery time.
+- **Never use terminal commands (cat >>, echo, bash) to write or append to files. Always use the editor's file tools.**
+- Do NOT change task status or board — the manager will update them.
 - After delivery, wait for the next instruction.
-- Add a timeline entry in the project folder.
 
 ## If blocked
 - Add a log entry with the blocker.
