@@ -48,3 +48,5 @@
 | **Rework Task（返工任务）** | 基于 `rework-task-template.json` 创建的修复任务。 |
 | **Skill** | 可复用的知识包，通过 `SKILL.md` 加载。 |
 | **Company Kit** | 本框架本身，作为只读参考，项目运行时不修改。 |
+| **manager-inbox.log** | Manager 向所有 Worker 发布审批、Done 通知、指令和回复的**唯一通道**。Manager 是唯一写入者，所有 Worker 在收到"继续"后读取此文件。项目初始化时由 Manager 创建为空文件。 |
+| **employee-\<id\>.log** | 每个 Worker 的**专属通道**，用于写入认领、交付、问题和状态更新。Worker 是唯一写入者，Manager 在轮询时读取。**Manager 禁止向此文件写入任何内容。** |

@@ -5,12 +5,21 @@
     {"id": "In Progress", "name": "In Progress"},
     {"id": "Done", "name": "Done"}
   ],
+  "concurrencyLayers": {
+    "description": "Tasks grouped by dependency layer. Same-layer tasks can execute in parallel.",
+    "layers": [
+      {"layer": 0, "taskIds": [], "description": "No dependencies, start immediately"},
+      {"layer": 1, "taskIds": [], "description": "Depends on Layer 0"},
+      {"layer": 2, "taskIds": [], "description": "Depends on Layer 1"}
+    ]
+  },
   "cards": [
     {
       "taskId": "",
       "title": "",
       "assignee": "",
       "difficulty": 1,
+      "concurrencyLayer": 0,
       "status": "New",
       "blockedBy": [],
       "notes": ""

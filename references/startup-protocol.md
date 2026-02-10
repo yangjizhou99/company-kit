@@ -19,7 +19,7 @@
 ```
 
 ### Manager 收到后立即执行（无需等待）：
-1. 读取 SKILL.md → rules.md → manager.md → task-contract.md → glossary.md
+1. 读取 SKILL.md → rules.md → manager.md → task-contract.md → glossary.md → decomposition-scheduling.md
 2. 确认已加载规则（一句话回复）
 3. 创建项目根目录（如 `snake-game/`）及子目录：
    ```
@@ -27,20 +27,38 @@
    ├── roles/
    ├── tasks/
    ├── messages/
-   ├── board.json         ← 从 progress-board.json 复制
+   │   └── manager-inbox.log  ← 空文件，Manager 审批/回复通道
+   ├── board.json         ← 从 progress-board.json 复制（含 concurrencyLayers）
    └── timeline.log       ← 空文件
    ```
 4. 创建自己的角色卡 `roles/manager.json`
-5. 将用户目标分解为任务卡，写入 `tasks/`
-6. 更新 `board.json`，将无依赖的任务标记为 Ready
-7. 输出 **Ready 列表公告**，格式：
+5. **并发优先分解**：将用户目标分解为任务卡，重点：
+   - 按模块/关注点拆分，而非按时间顺序
+   - 只标注真实数据依赖
+   - 为每个任务标注 `concurrencyLayer` (0, 1, 2...)
+   - 同层任务可并发执行
+   - 如有模块交互，先提取"定义接口"任务
+6. 写入 `tasks/`，更新 `board.json`（含 `concurrencyLayers` 段）
+7. **输出并发层级图**（必须），格式：
    ```
-   === Ready 列表 ===
-   - task-001: <标题> (难度 <N>)
-   - task-002: <标题> (难度 <N>)
+   === 并发层级图 ===
+   Layer 0 (可立即启动):
+     ├── task-001: <标题> (难度 N)
+     ├── task-002: <标题> (难度 N)
+     └── task-003: <标题> (难度 N)
+   Layer 1 (依赖 Layer 0):
+     ├── task-004: <标题> ← 依赖 [task-001]
+     └── task-005: <标题> ← 依赖 [task-002]
+   Layer 2 (依赖 Layer 1):
+     └── task-006: <标题> ← 依赖 [task-004, task-005]
+
+   并发度: 3 / 2 / 1
+   关键路径: task-001 → task-004 → task-006
    ===
-   等待员工加入认领。
    ```
+8. **并发质量检查**：至少一个 Layer 含 2+ 任务，无虚假依赖
+9. 将 Layer 0 中无依赖的任务标记为 Ready
+10. 输出 **Ready 列表公告**
 
 **关键：Manager 不等待就直接完成以上全部步骤。**
 
@@ -74,9 +92,10 @@
 
 ### Manager 收到轮询后：
 1. 检查所有 `messages/employee-*.log`
-2. 审批待处理的认领请求
-3. 在 `messages/manager-inbox.log` 中写入审批授予
-4. 回复用户当前状态
+2. 审批待处理的认领请求（三处更新：task JSON + board.json + manager-inbox.log）
+3. **主动异常检测**：检查每个 Worker 的心跳、是否有过期认领、是否有重复状态报告
+4. 对检测到的异常，发送 `[REDIRECT]` / `[WAKE]` / `[INSTRUCTION]` 指令到 `manager-inbox.log`
+5. 回复用户当前状态（含 Worker 健康度报告）
 
 ### 用户再到 Worker 会话中发送：
 ```
@@ -84,11 +103,11 @@
 ```
 
 ### Worker 收到"继续"后：
-1. 检查 `messages/manager-inbox.log`
-2. 如果看到审批授予 → 开始执行任务
-3. 完成后交付 → 在消息日志中报告
-4. Manager 会直接标记 Done，不做中间评审
-5. 等待下一步指令
+1. 在 `employee-<id>.log` 写入 `[HEARTBEAT]`
+2. 检查 `manager-inbox.log`（查看审批、指令、重定向）
+3. **如果有 `[REDIRECT]` 或 `[INSTRUCTION]`**：按指令执行（而非继续等待）
+4. 如果有审批 → 执行任务 → 交付
+5. 如果无消息 → 认领新任务或报告等待
 
 ### 用户重复此循环：
 ```
@@ -116,12 +135,13 @@
 1. 用户指定模型同时担任 Manager 和 Worker
 2. 发送：`读取 company-kit/SKILL.md，你同时担任 Manager 和 Worker，项目目标：<目标>`
 3. 模型按以下顺序自动执行：
-   - Manager 阶段：分解 → 创建任务卡 → 发布 Ready 列表
-   - Worker 阶段：认领 → 自我审批 → 执行 → 交付
-   - Manager 阶段：标记 Done → 解锁下游
+   - Manager 阶段：**并发优先分解** → 创建任务卡（含 concurrencyLayer） → 输出并发层级图 → 发布 Ready 列表
+   - Worker 阶段：从 Ready 列表中认领（同层任务可连续执行） → 自我审批 → 执行 → 交付
+   - Manager 阶段：标记 Done → 解锁下游 → 更新 Ready 列表
    - 重复直到所有任务完成
    - 请求用户最终验收
 4. 每完成一个任务后暂停，等用户发送"继续"推进下一个
+5. **同层任务可按任意顺序执行**，不必从左到右
 
 **注意：** 简化模式下审批门禁仍然存在，但由模型自己的 Manager 角色审批自己的 Worker 角色。日志仍需记录完整。
 

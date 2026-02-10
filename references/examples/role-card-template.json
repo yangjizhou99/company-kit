@@ -1,16 +1,29 @@
 {
-  "_note": "Save this file as <project>/roles/model-<id>.json",
-  "id": "<exact-model-id>",
-  "name": "<exact-model-name>",
-  "employeeId": "emp-001",
+  "_note": "Save this file as <project>/roles/model-<employeeId>.json",
+  "_identityRule": "employeeId MUST be unique. Format: emp-<model-short-name>-<4-char-hex>. Check existing roles/ before creating.",
+  "modelType": "<exact-model-name>",
+  "employeeId": "emp-<model-short-name>-<4hex>",
   "title": "Worker",
   "level": 3,
-  "capabilities": ["analysis", "coding"],
+  "capabilities": [
+    "analysis",
+    "coding"
+  ],
   "score": 100,
-  "preferredTaskDifficulty": [2, 3],
+  "preferredTaskDifficulty": [
+    2,
+    3
+  ],
   "doAndDonts": {
-    "do": ["Follow rules and approval gate", "Use your real model id"],
-    "dont": ["Work without approval", "Modify company-kit during project work"]
+    "do": [
+      "Follow rules and approval gate",
+      "Use employeeId in all logs and file names"
+    ],
+    "dont": [
+      "Work without approval",
+      "Modify company-kit during project work",
+      "Use model name instead of employeeId"
+    ]
   },
   "handshake": {
     "readRules": true,

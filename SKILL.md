@@ -24,10 +24,10 @@
 
 ## Worker 入口
 1. 读取：rules.md → onboarding.md → task-contract.md → glossary.md
-2. 声明你的模型 ID 和名称
-3. 创建角色卡到项目 roles/ 文件夹
+2. 生成唯一 employeeId（格式：`emp-<模型简称>-<4位hex>`）
+3. 检查 roles/ 确认无冲突后创建角色卡
 4. 读取项目 board.json 查看 Ready 列表
-5. 选择匹配你等级的任务 → 发送认领公告 → 等待审批
+5. 选择匹配你等级的任务 → 检查无重复认领 → 发送认领公告 → 等待审批
 
 ## 简化模式（单会话双角色）
 1. 读取：rules.md → manager.md → onboarding.md → task-contract.md → glossary.md

@@ -7,6 +7,7 @@ Use this format when delivering work:
 - Output: code or artifact
 - Mapping: show how outputs meet acceptance criteria
 - Notes: edge cases or assumptions
+- Interface Changes: declare any new public interfaces (e.g., CSS variables, API endpoints, exported functions)
 
 ## Example
 Summary: Implemented sum_to_n(n) using formula.
@@ -24,3 +25,6 @@ Mapping:
 
 Notes:
 - Assumes n is a positive integer.
+
+Interface Changes:
+- Public function: sum_to_n(int) -> int

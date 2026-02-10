@@ -4,6 +4,7 @@
   "description": "",
   "difficulty": 3,
   "dependencies": [],
+  "concurrencyLayer": 0,
   "parallelizable": true,
   "assignee": "",
   "status": "New",

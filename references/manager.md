@@ -18,16 +18,19 @@ This role issues commands, approves work, and maintains the task flow.
 - The manager must not switch roles or impersonate a worker.
 
 ## Workflow
-1) On receiving a project goal, immediately decompose into task cards.
-2) Create the project root folder, roles/, tasks/, messages/, board.json, timeline.log.
+1) On receiving a project goal, immediately decompose into task cards using **concurrency-first** approach (see decomposition-scheduling.md).
+2) Create the project root folder, roles/, tasks/, messages/, board.json, timeline.log, and **messages/manager-inbox.log** (empty file — this is the Manager's reply channel).
 3) Create your own manager role card in roles/.
-4) Write task cards into tasks/ and update board.json.
-5) Mark eligible tasks (no unmet dependencies) as Ready and announce the Ready list.
-6) Wait for employee messages and approval requests (do NOT block on this before decomposing).
-7) Approve a claimed task before any work starts.
-8) When a Worker delivers, mark the task Done and unblock dependents. No quality review.
-9) Continue until all tasks are Done, then request final user acceptance.
-10) If user rejects: create rework tasks for the specific issues.
+4) Write task cards into tasks/ — each task must include `concurrencyLayer` and `dependencies`.
+5) Update board.json with `concurrencyLayers` section.
+6) **Output the concurrency layer diagram** showing all layers and their parallelism.
+7) **Verify concurrency quality**: at least one layer must have 2+ tasks; no false dependencies.
+8) Mark eligible tasks (no unmet dependencies, Layer 0) as Ready and announce the Ready list.
+9) Wait for employee messages and approval requests (do NOT block on this before decomposing).
+10) Approve a claimed task before any work starts.
+11) When a Worker delivers, mark the task Done and unblock dependents — **immediately mark all newly eligible tasks as Ready** even if they span multiple layers. No quality review.
+12) Continue until all tasks are Done, then request final user acceptance.
+13) If user rejects: create rework tasks for the specific issues.
 
 ## Commands and approvals
 - Approvals are required before any task work starts.
@@ -65,22 +68,57 @@ This role issues commands, approves work, and maintains the task flow.
 
 ### Polling checklist
 1. **Read all employee message logs** (messages/employee-*.log).
-2. **For each new claim request:**
+2. **Conflict detection (before processing claims):**
+   - Collect all new `[CLAIM]` entries from all employee logs.
+   - Group claims by `task-id`.
+   - If the same task has multiple claims:
+     - Accept the claim with the EARLIEST timestamp.
+     - Reject all other claims by appending to `manager-inbox.log`:
+       ```
+       [<ISO timestamp>] [REJECT] task-<id> claim by <employeeId> rejected: already claimed by <first-employeeId>.
+       ```
+     - Log the conflict in `timeline.log`.
+3. **For each approved claim request:**
    - Verify eligibility (level, score, dependencies met).
-   - If eligible: update task JSON → status "In Progress", set assignee, add log entry.
-   - Update board.json.
-   - Add timeline.log entry: Claimed.
-   - Write approval grant in manager-inbox.log.
-3. **For each new delivery report:**
-   - Update task JSON → status "Done", add log entry.
-   - Update board.json.
-   - Add timeline.log entry: Delivered + Done.
+   - If eligible, perform ALL THREE file updates (skip none):
+     - ① Update `tasks/task-<id>.json` → set `status: "In Progress"`, `assignee`, `approval.approved: true`, `approval.approvedBy`, `approval.approvedAt`, add log entry.
+     - ② Update `board.json` → set matching card's `status` and `assignee`.
+     - ③ **Append to `messages/manager-inbox.log`** (NEVER to employee-*.log):
+       ```
+       [<ISO timestamp>] [APPROVAL] task-<id> approved for <employeeId>. Status: In Progress.
+       ```
+   - Add timeline.log entry.
+4. **For each new delivery report:**
+   - Perform ALL THREE file updates:
+     - ① Update `tasks/task-<id>.json` → set `status: "Done"`, add log entry.
+     - ② Update `board.json` → set matching card's `status: "Done"`.
+     - ③ **Append to `messages/manager-inbox.log`**:
+       ```
+       [<ISO timestamp>] [DONE] task-<id> marked Done. Delivered by <employeeId>.
+       ```
    - Unblock dependent tasks → mark them Ready. Announce Ready list.
    - Do NOT review quality — just mark Done and move on.
    - If all tasks are Done, announce project completion and request user acceptance.
-4. **For each question or blocker:**
-   - Reply with instructions in manager-inbox.log.
-5. **Announce current status** to the user.
+5. **For each question or blocker:**
+   - **Reply in `messages/manager-inbox.log`** (NEVER in employee-*.log):
+     ```
+     [<ISO timestamp>] [REPLY] To <employeeId>: <instructions>
+     ```
+6. **Idle & heartbeat check (per worker)**:
+   - For each registered employee (from roles/), check:
+     a. Has a `[HEARTBEAT]` entry since the last poll? If not, increment miss counter.
+     b. Has any `[DELIVERY]` or `[CLAIM]` entry since last 3 polls? If not, issue `[IDLE_WARNING]`.
+   - Miss counter actions:
+     - miss=1: append `[WAKE]` to `manager-inbox.log`
+     - miss=2: append `[WAKE_FINAL]` with specific instructions
+     - miss=3: append `[ABANDON]`, release tasks, update board.json, notify user
+
+7. **Proactive anomaly scan**:
+   - Scan all pending `[CLAIM]` entries. If the claimed task is already Done/In Progress, send `[REDIRECT]` with a suggested alternative.
+   - Scan for workers stuck in repeated waiting patterns (same status >2 times). Send `[INSTRUCTION]` with concrete next steps.
+   - If any unprocessed claim exists from a prior poll, approve or reject it NOW.
+
+8. **Announce current status** to the user.
 
 ### Important: file changes are normal
 - Workers create and edit deliverable files (code, HTML, CSS, JS, etc.) — this is expected.
@@ -101,3 +139,38 @@ This role issues commands, approves work, and maintains the task flow.
 - Do NOT ask the user to explain file changes — read employee logs instead.
 - Create a new messages/employee-<employeeId>.log when an employee joins.
 - Provide next-step instructions when messages arrive.
+
+## Approval write specification
+
+> **CRITICAL: Manager must NEVER write to `employee-*.log`.** These files are employee-owned.
+> All Manager output goes to `manager-inbox.log` exclusively.
+
+### Required format for each approval entry:
+```
+[<ISO timestamp>] [APPROVAL] task-<id> approved for <employeeId>. Status: In Progress.
+```
+
+### Required format for each Done entry:
+```
+[<ISO timestamp>] [DONE] task-<id> marked Done. Delivered by <employeeId>.
+```
+
+### Required format for each reply:
+```
+[<ISO timestamp>] [REPLY] To <employeeId>: <message content>
+```
+
+### Required format for instructions:
+```
+[<ISO timestamp>] [REDIRECT] To <employeeId>: <message>
+[<ISO timestamp>] [WAKE] To <employeeId>: <message>
+[<ISO timestamp>] [INSTRUCTION] To <employeeId>: <message>
+```
+
+### Three-file update rule
+Whenever Manager processes a claim or delivery, ALL THREE updates must be performed:
+1. `tasks/task-<id>.json` — status, assignee, approval fields, log entry
+2. `board.json` — matching card status and assignee
+3. `messages/manager-inbox.log` — approval/done/reply entry
+
+**If any of the three is skipped, Workers will not see the update and the project will deadlock.**

@@ -5,14 +5,15 @@
 - title: short name
 - description: problem statement
 - difficulty: 1-5
-- dependencies: task ids required before start
+- dependencies: task ids required before start (only real data dependencies)
+- concurrencyLayer: integer (0, 1, 2...) indicating which parallel wave this task belongs to. Layer 0 = no dependencies. Layer N = depends on at least one task in Layer N-1. Tasks in the same layer can execute concurrently.
 - parallelizable: true/false
-- assignee: model id
+- assignee: employeeId (the unique employee identifier, NOT model id)
 - restrictedAssignee: only this owner may claim
 - status: task state
 - approval: approval status block
-- inputs: required inputs
-- outputs: expected outputs
+- inputs: required inputs — **must specify exact file names and interface names from dependency tasks** (e.g., "tailwind.config.js with theme.extend.colors.border defined")
+- outputs: expected outputs — **must specify exact file names and any public interfaces they expose** (e.g., "src/index.css exposing CSS variables: --border, --background, --foreground")
 - acceptanceCriteria: pass/fail checks
 - logs: timeline of events
 - blame: responsibility record (owner + reason)
@@ -47,7 +48,7 @@ New -> Decomposing -> Ready -> In Progress (Approved) -> Done
 
 ## Logs format
 - at: ISO timestamp
-- by: model id or manager id
+- by: employeeId or manager id
 - event: Created | Claimed | Delivered | Done | Blocked | Rework
 - details: short summary
 
